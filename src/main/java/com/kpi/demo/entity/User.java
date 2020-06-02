@@ -3,6 +3,7 @@ package com.kpi.demo.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -22,5 +23,6 @@ public class User {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
-
+    @ManyToMany(mappedBy = "participants")
+    Set<Room> rooms;
 }

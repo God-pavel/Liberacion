@@ -3,6 +3,7 @@ package com.kpi.demo.controller;
 import com.kpi.demo.dto.UserDTO;
 import com.kpi.demo.service.UserService;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @Log4j2
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/")
 public class RegistrationController {
 
+    @Autowired
     private final UserService userService;
 
     public RegistrationController(UserService userService) {
