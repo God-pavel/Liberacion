@@ -23,6 +23,9 @@ public class User {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "session_id", nullable = false)
+    private Session session;
     @ManyToMany(mappedBy = "participants")
     Set<Room> rooms;
 }

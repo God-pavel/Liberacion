@@ -19,12 +19,12 @@ public class RegistrationController {
     }
 
     @PostMapping("register")
-    public boolean saveUser(@RequestBody UserDTO user) {
+    public long saveUser(@RequestBody UserDTO user) {
         return userService.saveNewUser(user);
     }
 
     @GetMapping("login")
-    public boolean login(@RequestBody UserDTO user) {
+    public long login(@RequestBody UserDTO user) {
         return userService.login(user);
     }
 }
