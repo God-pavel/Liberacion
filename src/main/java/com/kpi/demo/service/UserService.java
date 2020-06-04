@@ -1,12 +1,15 @@
 package com.kpi.demo.service;
 
 import com.kpi.demo.dto.UserDTO;
+import com.kpi.demo.entity.Challenge;
 import com.kpi.demo.entity.Session;
 import com.kpi.demo.entity.User;
+import com.kpi.demo.repository.ChallengeRepository;
 import com.kpi.demo.repository.SessionRepository;
 import com.kpi.demo.repository.UserRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -17,34 +20,54 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final SessionRepository sessionRepository;
+    private final ChallengeRepository challengeRepository;
 
-    public UserService(UserRepository userRepository, SessionRepository sessionRepository) {
+    public UserService(UserRepository userRepository, SessionRepository sessionRepository, ChallengeRepository challengeRepository) {
         this.userRepository = userRepository;
         this.sessionRepository = sessionRepository;
+        this.challengeRepository = challengeRepository;
     }
 
 
-    public long login(UserDTO userDTO) {
+    public String login(UserDTO userDTO) {
         User user = userRepository.findByLogin(userDTO.getLogin());
         if (user == null || !user.getPassword().equals(userDTO.getPassword())) {
-            return 0;
+            return "";
         }
         return user.getSession().getToken();
     }
+    public User getUserByToken(String token){
+        return userRepository.findBySession_Token(token);
+    }
 
-    public long saveNewUser(UserDTO userdto) {
+    public void editUser(User user, UserDTO userdto){
+        if(userdto.getPassword() != null){
+            user.setPassword(userdto.getPassword());
+        }
+        if(userdto.getUsername() != null){
+            user.setUsername(userdto.getUsername());
+        }
+        if(userdto.getAvatar() != null){
+            user.setAvatar(userdto.getAvatar());
+        }
+        userRepository.save(user);
+        log.info("User was edited. Username : " + user.getUsername());
+    }
+
+    public String saveNewUser(UserDTO userdto) {
         User userFromDb = userRepository.findByLogin(userdto.getLogin());
 
         if (userFromDb != null) {
             log.warn("login not unique!");
-            return 0;
+            return "";
         }
         Session session = Session.builder()
-                .token(userdto.getUsername().hashCode())
+                .token(userdto.getUsername().hashCode()+"")
                 .build();
         User user = User
                 .builder()
                 .username(userdto.getUsername())
+                .avatar(userdto.getAvatar())
                 .login(userdto.getLogin())
                 .password(userdto.getPassword())
                 .session(session)
@@ -71,6 +94,12 @@ public class UserService {
                     .build();
             saveNewUser(user);
         }
-
+        if (challengeRepository.findByName("smoking") == null) {
+            Challenge challenge = Challenge.builder()
+                    .creator(userRepository.findByLogin("admin"))
+                    .name("smoking")
+                    .build();
+            challengeRepository.save(challenge);
+        }
     }
 }

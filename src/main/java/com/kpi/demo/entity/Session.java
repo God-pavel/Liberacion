@@ -17,5 +17,5 @@ public class Session {
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "token", nullable = false, unique = true)
-    private long token;
+    private String token;
 }

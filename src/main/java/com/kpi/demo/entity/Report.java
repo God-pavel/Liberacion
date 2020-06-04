@@ -1,9 +1,10 @@
 package com.kpi.demo.entity;
 
+import com.kpi.demo.entity.enums.ReportStatus;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -18,16 +19,21 @@ public class Report {
     @Column(name = "id", nullable = false)
     private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "creator", nullable = false)
     private User creator;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "causer", nullable = false)
     private User causer;
-    @Column(name = "comment", nullable = false)
+    @Column(name = "comment")
     private String comment;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
     @Column(name = "date", nullable = false)
-    private LocalDate date;
+    private LocalDateTime date;
+    @Column(name = "image")
+    private String image;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private ReportStatus status;
 }

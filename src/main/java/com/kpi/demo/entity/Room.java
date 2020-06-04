@@ -3,6 +3,7 @@ package com.kpi.demo.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -19,6 +20,10 @@ public class Room {
     private Long id;
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+    @Column(name = "avatar")
+    private String avatar;
+    @Column(name = "expire_date")
+    private LocalDateTime expireDate;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User creator;
