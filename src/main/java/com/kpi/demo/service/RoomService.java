@@ -31,18 +31,19 @@ public class RoomService {
                 .anyMatch(room -> room.getId().equals(targetRoom.getId()));
     }
 
-    public void addUserToRoom(User user, long roomId){
+    public Room addUserToRoom(User user, long roomId){
         Room room = roomRepository.findById(roomId);
         room.getParticipants().add(user);
         roomRepository.save(room);
+        return room;
     }
 
-    public long createRoom(User creator, RoomDTO roomDTO) {
+    public Room createRoom(User creator, RoomDTO roomDTO) {
         Room roomFromDb = roomRepository.findByName(roomDTO.getName());
 
         if (roomFromDb != null) {
             log.warn("login not unique!");
-            return 0;
+            return null;//0;
         }
 
         Room room = Room
@@ -57,7 +58,7 @@ public class RoomService {
         room.getParticipants().add(creator);
         roomRepository.save(room);
         log.info("Room was saved. Room name : " + room.getName());
-        return room.getId();
+        return room;
     }
 
     public Room getRoomById(long id) {

@@ -2,6 +2,7 @@ package com.kpi.demo.controller;
 
 import com.kpi.demo.dto.UserDTO;
 import com.kpi.demo.entity.User;
+import com.kpi.demo.entity.Session;
 import com.kpi.demo.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,16 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public String saveUser(@RequestBody UserDTO user) {
-        final String token = userService.saveNewUser(user);
+    public Session saveUser(@RequestBody UserDTO user) {
+        final Session token = userService.saveNewUser(user);
         if (StringUtils.isEmpty(token)) {
             throw new AlreadyRegisteredException();
         } else return token;
     }
 
     @PostMapping("login")
-    public String login(@RequestBody UserDTO user) {
-        final String token = userService.login(user);
+    public Session login(@RequestBody UserDTO user) {
+        final Session token = userService.login(user);
         if (StringUtils.isEmpty(token)) {
             throw new UnauthorizedException();
         } else return token;

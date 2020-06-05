@@ -29,12 +29,12 @@ public class UserService {
     }
 
 
-    public String login(UserDTO userDTO) {
+    public Session login(UserDTO userDTO) {
         User user = userRepository.findByLogin(userDTO.getLogin());
         if (user == null || !user.getPassword().equals(userDTO.getPassword())) {
-            return "";
+            return null;//"";
         }
-        return user.getSession().getToken();
+        return user.getSession();//.getToken();
     }
     public User getUserByToken(String token){
         return userRepository.findBySession_Token(token);
@@ -54,12 +54,12 @@ public class UserService {
         log.info("User was edited. Username : " + user.getUsername());
     }
 
-    public String saveNewUser(UserDTO userdto) {
+    public Session saveNewUser(UserDTO userdto) {
         User userFromDb = userRepository.findByLogin(userdto.getLogin());
 
         if (userFromDb != null) {
             log.warn("login not unique!");
-            return "";
+            return null;//"";
         }
         Session session = Session.builder()
                 .token(userdto.getUsername().hashCode()+"")
@@ -76,7 +76,7 @@ public class UserService {
         sessionRepository.save(session);
         userRepository.save(user);
         log.info("User was saved. Username : " + user.getUsername());
-        return session.getToken();
+        return session;//.getToken();
     }
 
     public List<User> getAllUsers() {
