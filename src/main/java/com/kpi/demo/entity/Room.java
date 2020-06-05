@@ -24,6 +24,12 @@ public class Room {
     private String avatar;
     @Column(name = "expire_date")
     private LocalDateTime expireDate;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "report_id")
+    private Set<Report> reports;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "check_id")
+    private Set<Check> checks;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private User creator;

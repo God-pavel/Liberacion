@@ -43,7 +43,7 @@ public class UserController {
         userService.editUser(user, userDTO);
     }
     @GetMapping("user")
-    public User getUserInfo(@RequestBody UserDTO userDTO, @RequestHeader("authorization") String bearer) {
+    public User getUserInfo(@RequestHeader("authorization") String bearer) {
         return getAuthorizedUserByHeader(bearer);
     }
 
