@@ -26,9 +26,6 @@ public class Report {
     private User causer;
     @Column(name = "comment")
     private String comment;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "room_id", nullable = false)
-    private Room room;
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
     @Column(name = "image")
