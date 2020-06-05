@@ -3,6 +3,8 @@ package com.kpi.demo.controller;
 import com.kpi.demo.dto.CheckDTO;
 import com.kpi.demo.dto.ReportDTO;
 import com.kpi.demo.dto.RoomDTO;
+import com.kpi.demo.entity.Check;
+import com.kpi.demo.entity.Report;
 import com.kpi.demo.entity.Room;
 import com.kpi.demo.entity.User;
 import com.kpi.demo.service.CheckService;
@@ -13,13 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Log4j2
@@ -83,9 +79,9 @@ public class RoomController {
     }
 
     @PostMapping("/{id}/report")
-    public void createReport(@RequestHeader("authorization") String bearer,
-                             @PathVariable("id") long id,
-                             @RequestBody ReportDTO reportDTO) {
+    public Report createReport(@RequestHeader("authorization") String bearer,
+                               @PathVariable("id") long id,
+                               @RequestBody ReportDTO reportDTO) {
         User user = getAuthorizedUserByHeader(bearer);
         Room room = roomService.getRoomById(id);
         if (!roomService.isUserInRoom(user, room)) {
@@ -94,13 +90,13 @@ public class RoomController {
         if (reportService.isReportExist(user, room, reportDTO)) {
             throw new AlreadyExistException();
         }
-        reportService.createReport(user, room, reportDTO);
+        return reportService.createReport(user, room, reportDTO);
     }
 
     @PostMapping("/{id}/check")
-    public void createCheck(@RequestHeader("authorization") String bearer,
-                            @PathVariable("id") long id,
-                            @RequestBody CheckDTO checkDTO) {
+    public Check createCheck(@RequestHeader("authorization") String bearer,
+                             @PathVariable("id") long id,
+                             @RequestBody CheckDTO checkDTO) {
         User user = getAuthorizedUserByHeader(bearer);
         Room room = roomService.getRoomById(id);
         if (!roomService.isUserInRoom(user, room)) {
@@ -109,7 +105,7 @@ public class RoomController {
         if (checkService.isCheckExist(user, room, checkDTO)) {
             throw new AlreadyExistException();
         }
-        checkService.createCheck(user, room, checkDTO);
+        return checkService.createCheck(user, room, checkDTO);
     }
 
     private User getAuthorizedUserByHeader(String bearer) {

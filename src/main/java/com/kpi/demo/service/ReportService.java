@@ -27,7 +27,7 @@ public class ReportService {
         this.roomRepository = roomRepository;
     }
 
-    public void createReport(User creator, Room room, ReportDTO reportDTO) {
+    public Report createReport(User creator, Room room, ReportDTO reportDTO) {
         Report report = Report
                 .builder()
                 .creator(creator)
@@ -41,6 +41,7 @@ public class ReportService {
         room.getReports().add(report);
         roomRepository.save(room);
         log.info("Report was saved. Report id : " + report.getId());
+        return report;
     }
 
     public boolean isReportExist(User creator, Room room, ReportDTO reportDTO) {

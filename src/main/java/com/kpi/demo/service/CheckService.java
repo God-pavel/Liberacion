@@ -21,7 +21,7 @@ public class CheckService {
         this.roomRepository = roomRepository;
     }
 
-    public void createCheck(User creator, Room room, CheckDTO checkDTO) {
+    public Check createCheck(User creator, Room room, CheckDTO checkDTO) {
         Check check = Check
                 .builder()
                 .checker(creator)
@@ -31,6 +31,7 @@ public class CheckService {
         room.getChecks().add(check);
         roomRepository.save(room);
         log.info("Check was saved. Check id : " + check.getId());
+        return check;
     }
 
     public boolean isCheckExist(User creator, Room room, CheckDTO checkDTO) {
