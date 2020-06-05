@@ -51,7 +51,7 @@ public class RoomController {
     }
 
     @PostMapping()
-    public long createRoom(@RequestHeader("authorization") String bearer,
+    public Room createRoom(@RequestHeader("authorization") String bearer,
                            @RequestBody RoomDTO roomDTO) {
         User user = getAuthorizedUserByHeader(bearer);
         return roomService.createRoom(user, roomDTO);
@@ -69,7 +69,7 @@ public class RoomController {
     }
 
     @PostMapping("/{id}")
-    public void joinRoom(@RequestHeader("authorization") String bearer,
+    public Room joinRoom(@RequestHeader("authorization") String bearer,
                          @PathVariable("id") long id) {
         User user = getAuthorizedUserByHeader(bearer);
         Room room = roomService.getRoomById(id);
@@ -79,7 +79,7 @@ public class RoomController {
         if (roomService.isUserInRoom(user, room)) {
             throw new AlreadyExistException();
         }
-        roomService.addUserToRoom(user, id);
+        return roomService.addUserToRoom(user, id);
     }
 
     @PostMapping("/{id}/report")
